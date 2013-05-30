@@ -1,0 +1,75 @@
+// SuperCollider UGens, written as needed to facilitate porting SynthDefs
+
+ml = library("music.lib");
+ol = library("oscillator.lib");
+fl = library("filter.lib");
+
+pi = ml.PI;
+
+decay(n,x) = x - (x>0.0)/n;
+release(n) = + ~ decay(n);
+envgate(dur,trigger) = trigger : release(int(dur*float(ml.SR))) : >(0.0);
+
+perc(att,rel,trigger) = ml.adsr(att,0,1.0,rel,envgate(att,trigger));
+// SC: *perc(attackTime(0.01), releaseTime(1.0), peakLevel(1.0), curve(-4.0))
+// FIXME: Need "curve" support
+
+line(start,end,dur,trigger) = trigger : release(int(dur*float(ml.SR))) 
+		    : *(start-end)+end; // map 1-to-0 line to desired line
+// Line.kr(start, end, dur, mul, add, doneAction)
+
+sinosc0(freq) = ol.oscrs(freq); // SinOsc at phase zero
+// SinOsc.ar(freq, phase, mul, add)
+
+pmosc(carfreq,modfreq,index) = ol.oscrs(carfreq + (index*modfreq)
+			     * ol.oscrs(modfreq));
+// PMOsc.ar(carfreq, modfreq, index, modphase, mul, add)
+
+// Order correct?:
+
+lpf(freq) = fl.lowpass(3,freq);
+
+hpf(freq) = fl.highpass(3,freq);
+
+bpf(freq, rq) = fl.tf2(1.0,0,-1.0,-2.0*R*cos(theta),R^2) with {
+  theta = 2.0*pi*freq/ml.SR;
+  R = -pi*freq*rq/ml.SR;
+};
+// BPF.ar(in, freq(440.0), rq(1.0), mul(1.0), add(0.0))
+// second-order Butterworth bandpass filter.
+// freq - center frequency in Hertz.
+// rq - the reciprocal of Q = bandwidth / cutoffFreq.
+
+//--------------------------- pulse trains ------------------------------
+lfpulse(freq, iphase, width) = float(ol.sawpos(freq)+iphase <= width);
+lfpulse0(freq, width) = float(ol.sawpos(freq) <= width); // zero-phase case
+pulse0p5(freq) = ol.square(freq); // phase 0, duty cycle 0.5
+pulse0(freq,duty) = ol.pulsetrain(freq,duty);
+
+//lfsquare(freq) = lfpulse(freq, 0.5);
+
+// LFPulse.ar(freq, iphase, width, mul, add)
+// Non-band-limited pulse oscillator. 
+// Outputs a high value of one and a low value of zero.
+// freq - frequency in Hertz
+// iphase - initial phase offset in cycles ( 0..1 )
+// width - pulse width duty cycle from zero to one.
+
+// TODO:
+// Pulse.ar(freq, width, mul, add)
+// Band limited pulse wave generator with pulse width modulation.
+// freq - Frequency in Hertz (control rate)
+// width - Pulse width ratio from zero to one. 0.5 makes a square wave 
+// (control rate)
+
+//--------------------------- crackle -------------------------------
+
+crackle(p) = 1-1' : + ~ (conv2(p,-1.0) : -(0.5) : abs : clip(1000.0)) with
+{
+ conv2(k0,k1,x) = k0*x + k1*x';
+ clip(N,x) = max(0.0-float(N),min(float(N),x));
+};
+// Crackle.ar(param,mul,add)
+// A noise generator based on a chaotic function.
+// param - a parameter of the chaotic function with useful values from
+// just below 1.0 to just above 2.0. Towards 2.0 the sound crackles.

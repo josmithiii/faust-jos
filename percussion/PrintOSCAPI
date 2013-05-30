@@ -1,0 +1,18 @@
+#!/bin/csh -fx
+# make clean
+# make OSC=1
+cd jackgtkdir
+
+/bin/rm OSCAPI.txt
+oscdump 5511 > OSCAPI.txt &
+
+foreach i (*.cpp)
+  set j = ${i:r}
+  echo i = $i
+  echo j = $j
+  ./$j >&/dev/null &
+  sleep 3
+  oscsend localhost 5510 /\* s 'get'
+  kill %2
+end
+kill %1
