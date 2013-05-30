@@ -10,14 +10,13 @@ sc = library("sc.lib"); // SuperCollider compatibility library
 // based on a Sound-on-Sound 'synth secrets' tutorial:
 // http://www.soundonsound.com/sos/Jun02/articles/synthsecrets0602.asp
 
-gate = checkbox("gate [3]
-       [tooltip:noteOn = 1, noteOff = 0]");
+gate = checkbox("[0] gate [tooltip:noteOn = 1, noteOff = 0]");
 
 ampdb  = vslider("[1] amp_db [unit:dB] 
    [style:knob] [tooltip: Volume level in decibels]",-20,-60,40,0.1);
 amp = ampdb : ml.db2linear : smooth(0.999);
 
-freq = vslider("freq [style:knob]", 6000.0, 0, 10000, 1);
+freq = vslider("[2] freq [style:knob]", 6000.0, 0, 10000, 1);
 sustain = vslider("sustain [style:knob]", 0.1, 0, 10, 0.01);
 
 //freq = 6000;
@@ -43,6 +42,8 @@ body_hpf = root_cymbal : sc.hpf(sc.line(9000, 12000, sustain, trigger))
 cymbal_mix = (initial_bpf + body_hpf) * amp;
 
 process = cymbal_mix;
+
+
 
 
 

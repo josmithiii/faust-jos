@@ -17,15 +17,15 @@ ml = library("music.lib");
 // sustain = 0.4;
 // beater_noise_level = 0.025;
 
-gate = checkbox("Kick!");
+gate = checkbox("[0] gate");
 ampdb  = vslider("[1] amp_db [unit:dB] 
    [style:knob] [tooltip: Volume level in decibels]",-20,-60,40,0.1);
 amp = ampdb : smooth(0.999) : ml.db2linear;
-freq = vslider("freq [style:knob]", 50.0, 0, 1000, 0.1);
-mod_freq = vslider("mod_freq [style:knob]", 5.0, 0, 1000, 0.1);
-mod_index = vslider("mod_index [style:knob]", 5.0, 0, 20, 0.1);
-sustain = vslider("sustain [style:knob]", 0.4, 0, 3, 0.1);
-beater_noise_level = vslider("beater_noise_level [style:knob]", 0.025, 0, 1, 0.01);
+freq = vslider("[2] freq [style:knob]", 50.0, 0, 1000, 0.1);
+mod_freq = vslider("[3] mod_freq [style:knob]", 5.0, 0, 1000, 0.1);
+mod_index = vslider("[4] mod_index [style:knob]", 5.0, 0, 20, 0.1);
+sustain = vslider("[5] sustain [style:knob]", 0.4, 0, 3, 0.1);
+beater_noise_level = vslider("[6] beater_noise_level [style:knob]", 0.025, 0, 1, 0.01);
 
 trigger = gate>gate';
 pitch_contour = sc.line(freq*2, freq, 0.02, trigger);
@@ -50,6 +50,8 @@ process = kick_mix;
 //process = beater_env;
 //process = drum_env;
 //process = drum_lpf;
+
+
 
 
 

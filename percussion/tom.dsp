@@ -13,14 +13,14 @@ sc = library("sc.lib"); // SuperCollider compatibility library
 // SOStom -------
 // http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp
 
+gate = checkbox("[0] gate [tooltip:noteOn = 1, noteOff = 0]");
+trigger = gate > gate';
+
 ampdb  = vslider("[1] amp_db [unit:dB] 
    [tooltip: Volume level in decibels] [style:knob]",-20,-60,40,0.1);
 amp = ampdb : smooth(0.999) : ml.db2linear;
 
-gate = checkbox("gate [3] [tooltip:noteOn = 1, noteOff = 0]");
-trigger = gate > gate';
-
-freq = vslider("freq [style:knob]", 90, 0, 10000, 1);
+freq = vslider("[2] freq [style:knob]", 90, 0, 10000, 1);
 sustain = vslider("sustain [style:knob]", 0.4, 0, 10, 0.01);
 drum_timbre = vslider("drum_timbre [style:knob]", 1.0, 0, 10, 0.01);
 drum_mode_level = vslider("drum_mode_level [style:knob]", 0.25, 0, 10, 0.01);
@@ -46,7 +46,5 @@ process = tom_mix;
 //y:process = drum_mode_sin_1;
 //y:process = drum_mode_pmosc;
 //y:process = stick_env;
-
-
 
 

@@ -7,13 +7,13 @@
 import("oscillator.lib");
 
 // ======= Basic Parameters gate/gain/freq/xpose ==========
-gate = checkbox("[0]gate [tooltip:noteOn = 1, noteOff = 0]");
-gain = vslider("[1]gain [tooltip:Gain (value between 0 and 1)] [style:knob]",1,0,1,0.01); 
-freq = 2^(transpose/12)*vslider("[2]freq [unit:Hz] 
+gate = checkbox("[0] gate [tooltip:noteOn = 1, noteOff = 0]");
+gain = vslider("[1] gain [tooltip:Gain (value between 0 and 1)] [style:knob]",1,0,1,0.01); 
+freq = 2^(transpose/12)*vslider("[2] freq [unit:Hz] 
   [tooltip:Tone frequency] [style:knob]",440,20,1200,1);
-dur = vslider("[3]dur [unit:seconds]
+dur = vslider("[3] dur [unit:seconds]
   [tooltip:Overall duration in seconds] [style:knob]",4,0.1,120,0.1);
-transpose = vslider("[4]transpose [unit:semitones] 
+transpose = vslider("[4] transpose [unit:semitones] 
   [tooltip:Transposition] [style:knob]",0,-12,12,0.1);
 
 process = 
@@ -39,6 +39,8 @@ with {
     release(n) = + ~ decay(n);
     envgate(n) = trigger : release(n) : >(0.0);
 };
+
+
 
 
 
