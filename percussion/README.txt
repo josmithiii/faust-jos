@@ -4,10 +4,9 @@ To Do:
 
 * Collect percussion examples into percussion.lib and propose it
 
-* Make sure original licenses are propagated unchanged
+* Make sure original licenses are propagated unchanged (I assume everything is GPL)
 
-* Adapt old 'crackle' patch from Tim Stilson and any others related
-  /l/fj/crackle/
+* Adapt old 'crackle' patch from Tim Stilson and any others related: /l/fj/crackle/
 
 History
 
